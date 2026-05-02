@@ -85,3 +85,33 @@
                         <p class="empty-text">No owner registered</p>
                     {% endif %}
                 </div>
+
+                <!-- Residents Card -->
+                <div class="mini-person-card">
+                    <span class="status-label">Current Residents</span>
+                    <div class="resident-avatars" style="display: flex; gap: 8px; margin-top: 8px;">
+                        {% for record in residents %}
+                            <a href="{% url 'public_profile' record.resident.id %}" title="{{ record.resident.username }}">
+                                <div class="circle mini">
+                                    {% if record.resident.profile_image %}
+                                        <img src="{{ record.resident.profile_image.url }}" alt="{{ record.resident.username }}">
+                                    {% else %}
+                                        <div class="avatar-placeholder">{{ record.resident.first_name|first|upper }}</div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="empty-text">No active residents</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVIEWS SECTION -->
+        <div class="data-section mt-30">
+            <div class="section-top">
+                <h3>Resident Experiences</h3>
+                <p>What people are saying about living here.</p>
+            </div>
+            <div class="reviews-list">
