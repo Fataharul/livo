@@ -148,3 +148,53 @@
 
                             <div class="tag-list help-skills">
                                   {% for skill in help.skills.all %}
+                                <span class="livo-tag small-tag">{{ skill.name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="action-bar help-action-bar">
+                            <a href="{{ help.user.contact_link|default:'#' }}" target="_blank" class="action-btn message-link full-width-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span>Contact {{ help.user.first_name }}</span>
+                            </a>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="empty-feed">
+                        <p>No service providers found matching your criteria.</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- STANDARD POST DIRECTORY CARDS -->
+                {% for post in posts %}
+                    <article class="social-card" id="post-{{ post.id }}">
+                        <!-- CARD HEADER -->
+                        <div class="card-header">
+                            <div class="author-info">
+                                <a href="{% url 'public_profile' post.user.id %}" class="author-avatar circle">
+                                    {% if post.user.profile_image %}
+                                        <img src="{{ post.user.profile_image.url }}" alt="{{ post.user.first_name }}">
+                                    {% else %}
+                                        <div class="avatar-placeholder">{{ post.user.first_name|first|upper }}</div>
+                                    {% endif %}
+                                </a>
+                                <div class="author-details">
+                                    <div class="name-row">
+                                        <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none;">
+                                            <span class="author-name">{{ post.user.get_full_name|default:post.user.username }}</span>
+                                        </a>
+                                        <span class="role-badge {{ post.user.role|lower }}">{{ post.user.get_role_display }}</span>
+                                    </div>
+                                    <span class="post-time">{{ post.created_at|timesince }} ago</span>
+                                </div>
+                            </div>
+                            <div class="card-options">
+                                 <!-- Option icon if needed -->
+                            </div>
+                        </div>
+
+                        <!-- CARD BODY -->
+                        <div class="card-body">
