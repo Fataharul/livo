@@ -50,8 +50,18 @@ def dashboard(request):
 
     user = request.user
 
+    from django.db.models import Avg
+    user_reviews = user.received_reviews.all().order_by('-created_at')
+    avg_rating = user_reviews.aggregate(Avg('rating'))['rating__avg']
+
+    #from posts.models import Post
+    #user_posts = Post.objects.filter(user=user).order_by('-created_at')
+
     context = {
         'user': user,
+        'user_reviews': user_reviews,
+        'avg_rating': round(avg_rating, 1) if avg_rating else None,
+        #'user_posts': user_posts,
     }
 
     if user.role == 'ROOMMATE':
@@ -89,7 +99,6 @@ def dashboard(request):
     elif user.role == 'HOUSE_HELP':
         context['profile'] = Househelp.objects.filter(user=user).first()
         return render(request, 'dashboards/househelp.html', context)
-
 
     return redirect('landing')
 
