@@ -48,3 +48,53 @@
                                 <label>Max Price</label>
                                 <div class="price-input-wrapper">
                                     <span class="currency">$</span>
+                                     <input type="number" name="max_price" placeholder="Budget" value="{{ request.GET.max_price }}">
+                                </div>
+                            </div>
+                        {% elif post_type == 'HELP' %}
+                            <div class="input-group">
+                                <label>City</label>
+                                <input type="text" name="city" placeholder="e.g. Dhaka" value="{{ request.GET.city }}">
+                            </div>
+                            <div class="input-group">
+                                <label>Area</label>
+                                <input type="text" name="area" placeholder="e.g. Gulshan" value="{{ request.GET.area }}">
+                            </div>
+                            <div class="input-group">
+                                <label>Services Needed</label>
+                                <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; padding: 10px; background: #f8fafc; border-radius: 12px; border: 2px solid #f1f5f9;">
+                                    {% for skill in skills %}
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #475569; cursor: pointer; text-transform: none; letter-spacing: 0;">
+                                            <input type="checkbox" name="skills" value="{{ skill.id }}"
+                                                {% if skill.id in selected_skills %}checked{% endif %}
+                                                style="width: 16px; height: 16px;">
+                                            {{ skill.name }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Max Expected Salary</label>
+                                <div class="price-input-wrapper">
+                                    <span class="currency">৳</span>
+                                    <input type="number" name="max_salary" placeholder="Salary limit" value="{{ request.GET.max_salary }}">
+                                </div>
+                            </div>
+
+                        {% endif %}
+
+                        <div class="sidebar-actions">
+                            <button type="submit" class="btn btn-apply">Apply Filters</button>
+                            <a href="{% url 'feed' post_type %}" class="link-clear">Reset All</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- QUICK ACTIONS -->
+                <div class="sidebar-extra mt-20">
+                    <a href="{% url 'create_post' %}" class="sidebar-promo-btn">
+                        <span>+</span>
+                        <strong>Post a Listing</strong>
+                    </a>
+                </div>
+            </div>
