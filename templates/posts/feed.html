@@ -396,5 +396,79 @@
             console.error('Error liking post:', error);
         }
     }
+ // 3. Handle Enter Key for Comments
+    function handleCommentKey(event, postId) {
+        if (event.key === 'Enter') {
+            submitComment(postId);
+        }
+    }
 
+    // 4. Fetch API: Add Comment
+    async function submitComment(postId) {
+        const input = document.getElementById(`comment-input-${postId}`);
+        const content = input.value.trim();
+        if (!content) return;
+
+        try {
+            const response = await fetch(`/posts/comment/${postId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: content })
+            });
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                input.value = '';
+                addCommentToUI(postId, data.comment);
+            }
+        } catch (error) {
+            console.error('Error posting comment:', error);
+        }
+    }
+
+    function addCommentToUI(postId, comment) {
+        const list = document.getElementById(`comments-list-${postId}`);
+        const countEl = document.getElementById(`comments-count-${postId}`);
+
+        const commentHtml = `
+            <div class="comment-item fade-in">
+                <div class="comment-avatar circle mini">
+                    <div class="avatar-placeholder">${comment.user.charAt(0).toUpperCase()}</div>
+                </div>
+                <div class="comment-content-box">
+                    <div class="comment-user-name">${comment.user}</div>
+                    <div class="comment-text">${comment.content}</div>
+                    <div class="comment-time">${comment.created_at}</div>
+                </div>
+            </div>
+        `;
+        list.insertAdjacentHTML('beforeend', commentHtml);
+        countEl.innerText = parseInt(countEl.innerText) + 1;
+    }
+</script>
+
+<style>
+    :root {
+        --fb-bg: #f0f2f5;
+        --fb-card: #ffffff;
+        --fb-text-main: #050505;
+        --fb-text-sec: #65676b;
+        --fb-accent: #1877f2;
+        --fb-border: #ced0d4;
+    }
+
+    .social-feed-page { background: var(--fb-bg); min-height: 100vh; padding: 40px 0; }
+
+    /* Layout Update: Grid Sidebar + Main Feed */
+    .container-feed-layout {
+        max-width: 1020px;
+        margin: 0 auto;
+        padding: 0 15px;
+        display: flex;
+        align-items: flex-start;
+        gap: 30px;
+    }
 
