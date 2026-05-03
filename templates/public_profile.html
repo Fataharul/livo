@@ -50,3 +50,56 @@
             </p>
         </div>
         {% endif %}
+
+          <!-- LIFESTYLE PREFERENCES -->
+
+        <div class="data-section">
+            <div class="section-top">
+                <h3>Lifestyle Matrix</h3>
+                <p>Preferences and habits</p>
+            </div>
+            <div class="tag-list">
+                {% if profile and profile.preferences.all %}
+                    {% for pref in profile.preferences.all %}
+                        <span class="livo-tag">{{ pref.name }}</span>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-text">No preferences explicitly set.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% elif target_user.role == 'HOUSE_HELP' %}
+        <!-- HOUSE HELP SKILLS -->
+        <div class="data-section">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+                <div class="section-top" style="margin-bottom: 0;">
+                    <h3>Offered Services</h3>
+                    <p>Professional skills & expertise</p>
+                </div>
+                {% if profile.expected_salary %}
+                <div class="salary-badge" style="text-align: right;">
+                    <div style="margin-bottom: 8px;">
+                        {% if profile.availability %}
+                            <span style="color: #27ae60; font-weight: 800; font-size: 0.8rem; background: #e8f8f0; padding: 4px 10px; border-radius: 6px;">● AVAILABLE</span>
+                        {% else %}
+                            <span style="color: #64748b; font-weight: 800; font-size: 0.8rem; background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">● BUSY</span>
+                        {% endif %}
+                    </div>
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 2px;">Expected Salary</span>
+                    <strong style="font-size: 1.25rem; color: #ff4757;">৳{{ profile.expected_salary }}</strong>
+                    <small style="color: #94a3b8; font-weight: 500;">/mo</small>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="tag-list">
+                {% if profile and profile.skills.all %}
+                    {% for skill in profile.skills.all %}
+                        <span class="livo-tag" style="background:#fff1f2; color:#ff4757; border-color:#fda4af;">{{ skill.name }}</span>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-text">No specific services explicitly set.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
