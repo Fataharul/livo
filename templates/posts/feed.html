@@ -198,3 +198,53 @@
 
                         <!-- CARD BODY -->
                         <div class="card-body">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <h2 class="social-post-title" style="margin-bottom: 0;">{{ post.title }}</h2>
+                                {% if post.price %}
+                                    <div style="background: #e6f2ff; color: #1877f2; padding: 4px 12px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; flex-shrink: 0; margin-left: 12px;">
+                                        ৳{{ post.price }}{% if post.type == 'ROOM' %} /mo{% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <p class="social-post-text">{{ post.description }}</p>
+
+                            {% if post.type == 'ROOM' and post.apartment %}
+                                <div class="post-building-info" style="margin-top: 16px; padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                    <!-- Building Link -->
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <a href="{% url 'apartment_profile' post.apartment.id %}" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 1.2rem;">🏢</span>
+                                            <span style="font-weight: 700; color: #0f172a; border-bottom: 2px solid #1877f2;">{{ post.apartment.name }}</span>
+                                        </a>
+                                        <div class="social-location-tag" style="margin: 0; font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                            </svg>
+                                            {{ post.apartment.area }}, {{ post.apartment.city }}
+                                        </div>
+                                    </div>
+
+                                    <!-- People Links -->
+                                    <div style="display: flex; flex-wrap: wrap; gap: 20px; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+                                        <!-- Owner -->
+                                        {% if post.apartment.owner %}
+                                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                                <span style="font-size: 0.6rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Building Owner</span>
+                                                <a href="{% url 'public_profile' post.apartment.owner.id %}" title="View Owner: {{ post.apartment.owner.get_full_name|default:post.apartment.owner.username }}">
+                                                    <div class="circle mini" style="width: 28px; height: 28px; border: 2px solid #e2e8f0;">
+                                                        {% if post.apartment.owner.profile_image %}
+                                                            <img src="{{ post.apartment.owner.profile_image.url }}" alt="Owner">
+                                                        {% else %}
+                                                            <div class="avatar-placeholder" style="font-size: 0.7rem;">{{ post.apartment.owner.first_name|first|upper }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+
+                                        <!-- Roommates -->
+                                        {% if post.apartment.active_residents %}
+                                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                                <span style="font-size: 0.6rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Current Roommates</span>
+                                                <div style="display: flex; gap: 6px;">
+                                                    {% for record in post.apartment.active_residents %}
