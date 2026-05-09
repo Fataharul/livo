@@ -178,6 +178,8 @@ def public_profile(request, user_id):
 
 from django.contrib.auth import get_user_model
 
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
 
 def create_admin(request):
     User = get_user_model()
