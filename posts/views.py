@@ -125,9 +125,6 @@ def post_feed(request, post_type):
 @require_POST
 def toggle_like_ajax(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    # Since we are using simple integer likes as requested:
-    # We'll just increment for now. (Facebook style usually toggles, but without liked_by list,
-    # we'll just implement a simple +1 "heart" action).
     post.likes += 1
     post.save()
     return JsonResponse({
