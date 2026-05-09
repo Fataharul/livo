@@ -176,3 +176,18 @@ def public_profile(request, user_id):
 
     return render(request, 'public_profile.html', context)
 
+from django.contrib.auth import get_user_model
+
+
+def create_admin(request):
+    User = get_user_model()
+
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="livo-admin",
+            password="livo_team#sssm"
+        )
+        return HttpResponse("Admin created")
+
+    return HttpResponse("Already exists")
