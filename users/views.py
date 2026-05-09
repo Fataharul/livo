@@ -112,7 +112,13 @@ def signup(request):
             role = user.role
 
             if role == 'ROOMMATE':
-                profile = LifestylePreference.objects.create(user=user)
+                edu = form.cleaned_data.get('educational_institution')
+                work = form.cleaned_data.get('workplace')
+                profile = LifestylePreference.objects.create(
+                    user=user,
+                    educational_institution=edu,
+                    workplace=work
+                )
                 selected_preferences = form.cleaned_data.get('preferences')
                 if selected_preferences:
                     profile.preferences.set(selected_preferences)
@@ -176,7 +182,6 @@ def public_profile(request, user_id):
 
     return render(request, 'public_profile.html', context)
 
-from django.contrib.auth import get_user_model
 
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
